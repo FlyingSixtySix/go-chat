@@ -1,0 +1,84 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: rgb(0, 40, 80);
+    color: #FFF;
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+.chat {
+    margin: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 10%);
+    border-radius: 0.5rem;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.messages {
+    margin: 0;
+    padding: 1rem;
+    overflow-y: auto;
+    list-style-type: none;
+    background: rgba(255, 255, 255, 10%);
+    border-radius: 0.5rem;
+    height: 20rem;
+    min-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.messages li {
+    display: flex;
+    gap: 1rem;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.input-container {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.input-container input {
+    margin: 0;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 20%);
+    border: 0;
+    border-radius: 0.5rem;
+    color: #FFF;
+}
+
+.input-container input:focus {
+    outline: 2px solid rgba(255, 255, 255, 50%);
+}
+
+.input-container input::placeholder {
+    color: #AAA;
+}
+
+#input {
+    flex-grow: 1;
+}
+
+.send {
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 20%);
+    border: 0;
+    border-radius: 0.5rem;
+    color: #FFF;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+}
+
+.send:hover {
+    background: rgba(255, 255, 255, 30%);
+}
