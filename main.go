@@ -1,15 +1,30 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
 
+type state struct {
+	active   bool
+	username string
+}
+
+func (s *state) timeout(conn *websocket.Conn) {
+	timer := time.NewTimer(time.Minute * 5)
+	go func() {
+		<-timer.C
+		delete(clients, conn)
+	}()
+}
+
 var upgrader = websocket.Upgrader{}
-var clients = make(map[*websocket.Conn]bool)
+var clients = make(map[*websocket.Conn]*state)
 
 func broadcast(messageType int, message []byte) {
 	for client := range clients {
@@ -20,9 +35,22 @@ func broadcast(messageType int, message []byte) {
 			if err != nil {
 				log.Printf("Error closing connection from failed broadcast: %s\n", err.Error())
 			}
-			delete(clients, client)
+			clients[client].timeout(client)
 		}
 	}
+}
+
+type UserPacket struct {
+	Username string
+}
+
+type MessagePacket struct {
+	Content string
+}
+
+type Packet struct {
+	PacketType string `json:"type"`
+	Data       interface{}
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
@@ -31,14 +59,23 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Failed to upgrade WebSocket connection", err)
 		return
 	}
-	clients[conn] = true
+	clients[conn] = &state{
+		active:   true,
+		username: "Guest",
+	}
 
 	for {
-		messageType, message, err := conn.ReadMessage()
+		messageType, messageBytes, err := conn.ReadMessage()
 		if err != nil {
 			break
 		}
-		broadcast(messageType, message)
+		var packet Packet
+		err = json.Unmarshal(messageBytes, &packet)
+		if err != nil {
+			break
+		}
+		fmt.Println(packet.PacketType, packet.Data)
+		broadcast(messageType, messageBytes)
 	}
 }
 
@@ -47,7 +84,6 @@ func main() {
 		fmt.Println(r.Header.Get("Origin"))
 		switch r.Header.Get("Origin") {
 		case "http://localhost:63342":
-		case "":
 			return true
 		}
 		return false
