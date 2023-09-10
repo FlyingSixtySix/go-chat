@@ -11,11 +11,15 @@
 </head>
 <body>
     <div class="chat">
+        <div class="info">
+            <span id="online">0 online</span>
+        </div>
         <ul class="messages"></ul>
         <div class="input-container">
-            <input id="username" type="text" placeholder="Username" aria-label="Username input">
-            <input id="input" type="text" placeholder="Type a message..." aria-label="Message input">
-            <button class="send">➤</button>
+            <input id="username" type="text" placeholder="Username" aria-label="Username input" required>
+            <button id="username-lock">🔒</button>
+            <input id="input" type="text" placeholder="Type a message..." aria-label="Message input" required>
+            <button id="send">➤</button>
         </div>
     </div>
     <script src="index.js"></script>

@@ -30,7 +30,7 @@ body {
     height: 20rem;
     min-width: 40rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 0.5rem;
 }
 
@@ -39,7 +39,7 @@ body {
     gap: 1rem;
 }
 
-.username {
+.messages .username {
     font-weight: bold;
 }
 
@@ -65,11 +65,16 @@ body {
     color: #AAA;
 }
 
-#input {
+.input-container input:disabled {
+    background: rgba(0, 0, 0, 50%);
+    color: #888;
+}
+
+.input-container #input {
     flex-grow: 1;
 }
 
-.send {
+.input-container button {
     padding: 0.5rem;
     background: rgba(255, 255, 255, 20%);
     border: 0;
@@ -79,6 +84,11 @@ body {
     cursor: pointer;
 }
 
-.send:hover {
+.input-container button:hover {
     background: rgba(255, 255, 255, 30%);
+}
+
+.input-container button:disabled {
+    background: rgba(0, 0, 0, 30%);
+    cursor: not-allowed;
 }
